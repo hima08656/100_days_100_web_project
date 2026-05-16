@@ -164,8 +164,8 @@ async function fetchRepoStats() {
         if (forkEl) forkEl.textContent = (repoData.forks_count || 0).toLocaleString();
         if (issueEl) issueEl.textContent = Math.max(0, (repoData.open_issues_count || 0) - (prData.total_count || 0)).toLocaleString();
         if (prEl) prEl.textContent = (prData.total_count || 0).toLocaleString();
-    } catch (error) { 
-        console.error("Stats fetch error:", error); 
+    } catch (error) {
+        console.error("Stats fetch error:", error);
     }
 }
 
@@ -191,7 +191,8 @@ function initCanvas() {
             this.size = Math.random() * 2 + 1;
         }
         update() {
-            this.x += this.vx; this.y += this.vy;
+            this.x += this.vx;
+            this.y += this.vy;
             if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
             if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
         }
@@ -212,7 +213,8 @@ function initCanvas() {
         ctx.fillStyle = isLight ? 'rgba(240, 240, 240, 0.3)' : 'rgba(10, 10, 15, 0.15)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        particles.forEach(p => { p.update(); p.draw(); });
+        particles.forEach(p => { p.update();
+            p.draw(); });
 
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
@@ -296,7 +298,7 @@ function fillTable() {
 // 5. CORE FILTER & RENDER LOGIC
 // ============================================
 function applyFilters() {
-    const searchVal = document.getElementById('searchInput')?.value.toLowerCase() || "";
+    const searchVal = document.getElementById('searchInput') ? .value.toLowerCase() || "";
 
     filteredProjectData = projectData.filter(project => {
         if (project.length < 5) return false;
@@ -331,12 +333,23 @@ function renderTable() {
 
     paginatedItems.forEach(e => {
         const row = document.createElement('tr');
+
+        const dayNumber = e[0].replace('Day ', '').trim(); // "Day 1" -> "1"
+
         row.innerHTML = `
-            <td>${e[0]}</td>
-            <td class="project-name">${e[1]} <small style="opacity:0.5">(${e[4]})</small></td>
-            <td><a class="button" href="${e[2].trim()}" target="_blank">View Demo <i class="fas fa-external-link-alt"></i></a></td>
-        `;
+        <td>${e[0]}</td>
+        <td class="project-name">${e[1]} <small style="opacity:0.5">(${e[4]})</small></td>
+        <td>
+            <a class="button" href="project.html?id=${dayNumber}">
+                <i class="fas fa-info-circle"></i> Details
+            </a>
+            <a class="button" href="${e[2].trim()}" target="_blank" style="margin-left:8px">
+                View Demo <i class="fas fa-external-link-alt"></i>
+            </a>
+        </td>
+    `;
         tbody.appendChild(row);
+
     });
 }
 
@@ -351,12 +364,18 @@ function createPagination() {
     const prevBtn = document.createElement('button');
     prevBtn.innerText = 'Previous';
     prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => { currentPage--; renderTable(); createPagination(); window.scrollTo(0, 450); };
+    prevBtn.onclick = () => { currentPage--;
+        renderTable();
+        createPagination();
+        window.scrollTo(0, 450); };
 
     const nextBtn = document.createElement('button');
     nextBtn.innerText = 'Next';
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => { currentPage++; renderTable(); createPagination(); window.scrollTo(0, 450); };
+    nextBtn.onclick = () => { currentPage++;
+        renderTable();
+        createPagination();
+        window.scrollTo(0, 450); };
 
     const info = document.createElement('span');
     info.innerText = ` Page ${currentPage} of ${totalPages} `;
@@ -376,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
 
     // Search input
-    document.getElementById('searchInput')?.addEventListener('input', applyFilters);
+    document.getElementById('searchInput') ? .addEventListener('input', applyFilters);
 
     // Filter Buttons (Toggle Logic)
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -395,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if ((isDiff && currentDifficulty === val) || (!isDiff && currentCategory === val)) {
                 this.classList.add('active');
             } else if (!isDiff && currentCategory === 'all') {
-                document.querySelector('[data-category="all"]')?.classList.add('active');
+                document.querySelector('[data-category="all"]') ? .classList.add('active');
             }
 
             applyFilters();

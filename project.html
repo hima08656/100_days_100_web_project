@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Detail | 100 Days 100 Web Projects</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="project_detail.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Header -->
+    <header class="detail-header-bar">
+        <a href="index.html" class="logo-link">
+            <i class="fas fa-code"></i> 100 Days 100 Projects
+        </a>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Main Detail Section -->
+    <main class="detail-wrapper">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i> Back to All Projects
+        </button>
+
+        <div class="detail-card" id="projectDetail">
+            <div class="detail-top">
+                <span class="day-badge" id="dayBadge">Day 1 of 100</span>
+                <span class="difficulty-badge" id="difficultyBadge">beginner</span>
+            </div>
+
+            <h1 class="detail-title" id="projectTitle">Loading...</h1>
+
+            <div class="tech-stack" id="techStack"></div>
+
+            <p class="detail-description" id="projectDescription">
+                Explore this project and check out the live demo and source code.
+            </p>
+
+            <div class="action-buttons">
+                <a id="liveDemoBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> View Live Demo
+                </a>
+                <a id="sourceCodeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> View Source Code
+                </a>
+            </div>
+
+            <div class="iframe-container" id="iframeContainer">
+                <h3 class="preview-title"><i class="fas fa-eye"></i> Live Preview</h3>
+                <iframe id="projectIframe" src="" frameborder="0" loading="lazy"></iframe>
+            </div>
+        </div>
+    </main>
+
+    <script src="index.js"></script>
+    <script src="project_detail.js"></script>
+</body>
+
+</html>
