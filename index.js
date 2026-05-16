@@ -213,8 +213,10 @@ function initCanvas() {
         ctx.fillStyle = isLight ? 'rgba(240, 240, 240, 0.3)' : 'rgba(10, 10, 15, 0.15)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        particles.forEach(p => { p.update();
-            p.draw(); });
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
 
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
@@ -364,18 +366,22 @@ function createPagination() {
     const prevBtn = document.createElement('button');
     prevBtn.innerText = 'Previous';
     prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => { currentPage--;
+    prevBtn.onclick = () => {
+        currentPage--;
         renderTable();
         createPagination();
-        window.scrollTo(0, 450); };
+        window.scrollTo(0, 450);
+    };
 
     const nextBtn = document.createElement('button');
     nextBtn.innerText = 'Next';
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => { currentPage++;
+    nextBtn.onclick = () => {
+        currentPage++;
         renderTable();
         createPagination();
-        window.scrollTo(0, 450); };
+        window.scrollTo(0, 450);
+    };
 
     const info = document.createElement('span');
     info.innerText = ` Page ${currentPage} of ${totalPages} `;
