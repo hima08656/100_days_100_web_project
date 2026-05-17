@@ -4,63 +4,178 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project Detail | 100 Days 100 Web Projects</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="project_detail.css" />
+    <title>Project Details | 100 Days 100 Web Projects</title>
+    <link rel="icon" href="data:," />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="project-detail.css" />
 </head>
 
 <body>
+    <!-- Background Grid Effect (matches homepage) -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
 
-    <canvas id="bgCanvas"></canvas>
-
-    <!-- Header -->
-    <header class="detail-header-bar">
-        <a href="index.html" class="logo-link">
-            <i class="fas fa-code"></i> 100 Days 100 Projects
-        </a>
-        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
-            <i class="fas fa-moon"></i>
-        </button>
-    </header>
-
-    <!-- Main Detail Section -->
-    <main class="detail-wrapper">
-        <button class="back-btn" onclick="window.location.href='index.html'">
-            <i class="fas fa-arrow-left"></i> Back to All Projects
-        </button>
-
-        <div class="detail-card" id="projectDetail">
-            <div class="detail-top">
-                <span class="day-badge" id="dayBadge">Day 1 of 100</span>
-                <span class="difficulty-badge" id="difficultyBadge">beginner</span>
-            </div>
-
-            <h1 class="detail-title" id="projectTitle">Loading...</h1>
-
-            <div class="tech-stack" id="techStack"></div>
-
-            <p class="detail-description" id="projectDescription">
-                Explore this project and check out the live demo and source code.
-            </p>
-
-            <div class="action-buttons">
-                <a id="liveDemoBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                    <i class="fas fa-rocket"></i> View Live Demo
-                </a>
-                <a id="sourceCodeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                    <i class="fab fa-github"></i> View Source Code
-                </a>
-            </div>
-
-            <div class="iframe-container" id="iframeContainer">
-                <h3 class="preview-title"><i class="fas fa-eye"></i> Live Preview</h3>
-                <iframe id="projectIframe" src="" frameborder="0" loading="lazy"></iframe>
-            </div>
+    <!-- Navbar (Matching Homepage) -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">100 DAYS · 100 WEB PROJECTS</span>
+            </a>
         </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="contributor.html">Contributors</a>
+            <a href="https://github.com/dhairyagothi/100_days_100_web_project" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- Loader -->
+    <div id="loader" class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+    <main class="detail-container" id="detailContainer" style="display:none;">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="index.html">Archive</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span id="breadcrumbDay">Day 1</span>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="project-hero">
+            <div class="hero-content">
+                <div class="meta-row">
+                    <span class="day-badge" id="projectDay">DAY 1</span>
+                    <span class="category-badge" id="projectCategory">TOOL</span>
+                </div>
+
+                <h1 id="projectTitle">To-Do List</h1>
+                <p class="project-desc" id="projectDescription">
+                    A fully functional task management application with local storage persistence.
+                </p>
+
+                <div class="tech-stack" id="techStack">
+                    <!-- Tech tags injected here -->
+                </div>
+
+                <div class="action-row">
+                    <a id="liveDemoBtn" href="#" target="_blank" class="btn btn-primary">
+            View Demo <i class="fa-solid fa-arrow-right"></i>
+          </a>
+                    <a id="sourceCodeBtn" href="#" target="_blank" class="btn btn-secondary">
+                        <i class="fa-brands fa-github"></i> Source Code
+                    </a>
+                    <button id="shareBtn" class="btn btn-icon" title="Share Project">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
+                </div>
+            </div>
+
+            <div class="hero-preview">
+                <div class="browser-frame">
+                    <div class="browser-header">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-address" id="urlBar">100-days-100-web-project.vercel.app</div>
+                    </div>
+                    <div class="preview-image-wrapper">
+                        <img id="projectImage" src="" alt="Project Preview" />
+                        <div class="preview-overlay">
+                            <button class="btn btn-play" id="playDemoBtn">
+                <i class="fa-solid fa-play"></i> Live Preview
+              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Preview Section -->
+        <section class="section preview-section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-eye"></i> Live Preview</h2>
+                <button class="btn btn-sm btn-outline" id="fullscreenBtn">
+          <i class="fa-solid fa-expand"></i> Fullscreen
+        </button>
+            </div>
+            <div class="iframe-container">
+                <iframe id="previewFrame" src="" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="section">
+            <h2><i class="fa-solid fa-layer-group"></i> Features</h2>
+            <div class="features-grid" id="featuresGrid">
+                <!-- Features injected here -->
+            </div>
+        </section>
+
+        <!-- Implementation Details -->
+        <section class="section impl-section">
+            <div class="impl-grid">
+                <div class="impl-card">
+                    <h3><i class="fa-solid fa-code"></i> Tech Stack</h3>
+                    <ul id="techList" class="tech-list"></ul>
+                </div>
+
+                <div class="impl-card">
+                    <h3><i class="fa-solid fa-user"></i> Contributor</h3>
+                    <div class="contributor-info" id="contributorBox">
+                        <img id="contribAvatar" src="" alt="Contributor" />
+                        <div>
+                            <p id="contribName" class="contrib-name">Name</p>
+                            <a id="contribGithub" href="#" target="_blank" class="contrib-link">
+                                <i class="fa-brands fa-github"></i> View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <section class="project-nav">
+            <a href="#" id="prevProject" class="nav-card">
+                <div class="nav-arrow"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="nav-content">
+                    <small>Previous Project</small>
+                    <p id="prevTitle">Digital Clock</p>
+                </div>
+            </a>
+
+            <a href="#" id="nextProject" class="nav-card nav-next">
+                <div class="nav-content">
+                    <small>Next Project</small>
+                    <p id="nextTitle">Indian Flag</p>
+                </div>
+                <div class="nav-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+        </section>
+
     </main>
 
-    <script src="index.js"></script>
+    <!-- Error State -->
+    <div id="errorBox" class="error-container" style="display:none;">
+        <div class="error-icon">404</div>
+        <h2>Project Not Found</h2>
+        <p>The project you're looking for doesn't exist in the archive.</p>
+        <a href="index.html" class="btn btn-primary">Browse All Projects</a>
+    </div>
+
     <script src="project_detail.js"></script>
 </body>
 

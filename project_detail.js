@@ -1,118 +1,187 @@
-/**
- * Project Detail Page Logic
- * Reads project ID from URL and renders project details
- *
- * NOTE: applySavedTheme(), setupThemeToggle(), and initCanvas()
- * are already called by index.js DOMContentLoaded handler.
- * We do NOT call them again here to avoid double-bindings.
- */
+// Project Data Structure - Add all 117 projects here or fetch from JSON
+const projectsData = [{
+        id: 1,
+        day: "DAY 1",
+        title: "To-Do List",
+        category: "TOOL",
+        description: "A clean and functional task management application with local storage persistence. Add, complete, and delete tasks with a smooth user experience.",
+        image: "projects/01-todo-list/preview.jpg", // Update paths as per your structure
+        liveUrl: "projects/01-todo-list/index.html",
+        repoUrl: "https://github.com/dhairyagothi/100_days_100_web_project/tree/main/projects/01-todo-list",
+        tech: ["HTML", "CSS", "JavaScript"],
+        features: [
+            { icon: "fa-check-circle", title: "Task Management", desc: "Add, edit, and delete tasks effortlessly" },
+            { icon: "fa-database", title: "Local Storage", desc: "Tasks persist between browser sessions" },
+            { icon: "fa-filter", title: "Filtering", desc: "View all, active, or completed tasks" },
+            { icon: "fa-mobile-alt", title: "Responsive", desc: "Works seamlessly on all devices" }
+        ],
+        contributor: {
+            name: "Dhairya Gothi",
+            github: "dhairyagothi",
+            avatar: "https://github.com/dhairyagothi.png"
+        }
+    },
+    {
+        id: 2,
+        day: "DAY 2",
+        title: "Digital Clock",
+        category: "UI",
+        description: "A sleek digital clock with real-time updates, date display, and smooth animations.",
+        image: "projects/02-digital-clock/preview.jpg",
+        liveUrl: "projects/02-digital-clock/index.html",
+        repoUrl: "https://github.com/dhairyagothi/100_days_100_web_project/tree/main/projects/02-digital-clock",
+        tech: ["HTML", "CSS", "JavaScript"],
+        features: [
+            { icon: "fa-clock", title: "Real-time", desc: "Live updating every second" },
+            { icon: "fa-calendar", title: "Date Display", desc: "Shows current date and day" },
+            { icon: "fa-palette", title: "Themes", desc: "Multiple color themes available" }
+        ],
+        contributor: {
+            name: "Dhairya Gothi",
+            github: "dhairyagothi",
+            avatar: "https://github.com/dhairyagothi.png"
+        }
+    }
+    // Add remaining projects...
+];
 
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = parseInt(urlParams.get('id'));
 
-    // Get project ID from URL: project.html?id=5
-    var params = new URLSearchParams(window.location.search);
-    var projectId = parseInt(params.get('id'));
-
-    // Validate ID
-    if (!projectId || isNaN(projectId) || projectId < 1 || projectId > PROJECT_DATA.length) {
-        showNotFound();
+    if (!projectId) {
+        showError();
         return;
     }
 
-    // Find project (array index = projectId - 1)
-    var project = PROJECT_DATA[projectId - 1];
-
-    if (!project) {
-        showNotFound();
-        return;
-    }
-
-    // Get data from array
-    var day = project[0];
-    var name = project[1];
-    var link = project[2];
-    var tags = project[3];
-    var difficulty = project[4];
-
-    // Update page title
-    document.title = name + ' | 100 Days 100 Web Projects';
-
-    // Day Badge
-    var dayBadge = document.getElementById('dayBadge');
-    if (dayBadge) dayBadge.textContent = day + ' of 116';
-
-    // Difficulty Badge
-    var diffBadge = document.getElementById('difficultyBadge');
-    if (diffBadge) diffBadge.textContent = difficulty;
-
-    // Project Title
-    var titleEl = document.getElementById('projectTitle');
-    if (titleEl) titleEl.textContent = name;
-
-    // Tech Stack Tags
-    var techContainer = document.getElementById('techStack');
-    var tagList = tags.split(' ').filter(function(t) { return t.trim() !== ''; });
-
-    if (techContainer) {
-        tagList.forEach(function(tag) {
-            var span = document.createElement('span');
-            span.className = 'tech-tag';
-            span.textContent = tag;
-            techContainer.appendChild(span);
-        });
-    }
-
-    // Description
-    var descEl = document.getElementById('projectDescription');
-    if (descEl) {
-        descEl.textContent = name + ' is part of the 100 Days 100 Web Projects challenge. ' +
-            'This is a ' + difficulty + ' level project that uses ' + tagList.join(', ') + '. ' +
-            'Click the buttons below to explore the live demo or view the source code on GitHub.';
-    }
-
-    // Live Demo Button
-    var liveBtn = document.getElementById('liveDemoBtn');
-    if (liveBtn) {
-        liveBtn.href = link.trim();
-    }
-
-    // Source Code Button
-    var sourceBtn = document.getElementById('sourceCodeBtn');
-    if (sourceBtn) {
-        if (link.indexOf('github.com') !== -1) {
-            sourceBtn.href = link.trim();
-        } else {
-            var folderPath = link.replace('./', '').replace(/\/[^\/]+\.html$/, '');
-            sourceBtn.href = 'https://github.com/dhairyagothi/100_days_100_web_project/tree/Main/' + folderPath;
-        }
-    }
-
-    // Iframe Preview
-    var iframeContainer = document.getElementById('iframeContainer');
-    var iframe = document.getElementById('projectIframe');
-
-    if (iframeContainer && iframe) {
-        if (link.indexOf('github.com') !== -1) {
-            iframeContainer.style.display = 'none';
-        } else if (link.indexOf('http') === 0) {
-            iframe.src = link.trim();
-        } else {
-            iframe.src = link.trim();
-        }
-    }
-
+    loadProject(projectId);
 });
 
-// Show Not Found message
-function showNotFound() {
-    var card = document.getElementById('projectDetail');
-    if (card) {
-        card.innerHTML =
-            '<div class="not-found">' +
-            '<h2>Project Not Found</h2>' +
-            '<p>The project you are looking for does not exist.</p>' +
-            '<br/>' +
-            '<a href="index.html" class="btn btn-primary">Back to All Projects</a>' +
-            '</div>';
+function loadProject(id) {
+    const project = projectsData.find(p => p.id === id);
+
+    if (!project) {
+        showError();
+        return;
     }
+
+    // Populate content
+    document.getElementById('projectDay').textContent = project.day;
+    document.getElementById('projectCategory').textContent = project.category;
+    document.getElementById('projectTitle').textContent = project.title;
+    document.getElementById('projectDescription').textContent = project.description;
+    document.getElementById('breadcrumbDay').textContent = project.day;
+    document.title = `${project.title} | 100 Days 100 Web Projects`;
+
+    // Tech stack
+    const techStack = document.getElementById('techStack');
+    techStack.innerHTML = project.tech.map(t =>
+        `<span class="tech-tag">${t}</span>`
+    ).join('');
+
+    // Tech list (detailed)
+    document.getElementById('techList').innerHTML = project.tech.map(t =>
+        `<li>${t}</li>`
+    ).join('');
+
+    // Links
+    document.getElementById('liveDemoBtn').href = project.liveUrl;
+    document.getElementById('sourceCodeBtn').href = project.repoUrl;
+    document.getElementById('previewFrame').src = project.liveUrl;
+    document.getElementById('urlBar').textContent = project.liveUrl;
+
+    // Image
+    document.getElementById('projectImage').src = project.image;
+
+    // Features
+    const featuresGrid = document.getElementById('featuresGrid');
+    featuresGrid.innerHTML = project.features.map(f => `
+    <div class="feature-card">
+      <i class="fa-solid ${f.icon}"></i>
+      <h3>${f.title}</h3>
+      <p>${f.desc}</p>
+    </div>
+  `).join('');
+
+    // Contributor
+    document.getElementById('contribName').textContent = project.contributor.name;
+    document.getElementById('contribGithub').href = `https://github.com/${project.contributor.github}`;
+    document.getElementById('contribAvatar').src = project.contributor.avatar;
+
+    // Navigation
+    setupNavigation(id);
+
+    // Hide loader
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('detailContainer').style.display = 'block';
+
+    // Share button
+    setupShare(project);
+}
+
+function setupNavigation(currentId) {
+    const prev = projectsData.find(p => p.id === currentId - 1);
+    const next = projectsData.find(p => p.id === currentId + 1);
+
+    const prevBtn = document.getElementById('prevProject');
+    const nextBtn = document.getElementById('nextProject');
+
+    if (prev) {
+        prevBtn.href = `project.html?id=${prev.id}`;
+        document.getElementById('prevTitle').textContent = prev.title;
+    } else {
+        prevBtn.style.visibility = 'hidden';
+    }
+
+    if (next) {
+        nextBtn.href = `project.html?id=${next.id}`;
+        document.getElementById('nextTitle').textContent = next.title;
+    } else {
+        nextBtn.style.visibility = 'hidden';
+    }
+}
+
+function setupShare(project) {
+    const shareBtn = document.getElementById('shareBtn');
+    shareBtn.addEventListener('click', async() => {
+        const shareData = {
+            title: `${project.title} - 100 Days 100 Web Projects`,
+            text: `Check out ${project.title} by ${project.contributor.name}`,
+            url: window.location.href
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                const originalHTML = shareBtn.innerHTML;
+                shareBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                setTimeout(() => {
+                    shareBtn.innerHTML = originalHTML;
+                }, 2000);
+            }
+        } catch (err) {
+            console.error('Share failed:', err);
+        }
+    });
+
+    // Play button overlay
+    document.getElementById('playDemoBtn').addEventListener('click', () => {
+        document.getElementById('previewFrame').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Fullscreen
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+        const iframe = document.getElementById('previewFrame');
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        }
+    });
+}
+
+function showError() {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('errorBox').style.display = 'block';
 }
